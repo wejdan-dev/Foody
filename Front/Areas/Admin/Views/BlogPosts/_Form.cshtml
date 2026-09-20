@@ -1,0 +1,78 @@
+@model Front.ViewModels.Admin.BlogPostFormViewModel
+@{
+    var previewImage = string.IsNullOrWhiteSpace(Model.ImageFileName) ? string.Empty : Url.Content($"~/ProjectFile/img/{Model.ImageFileName}");
+}
+
+<div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+@if (Model.Id is not null)
+{
+    <input type="hidden" asp-for="Id" />
+}
+
+<div class="row g-3">
+    <div class="col-md-8">
+        <label asp-for="Title" class="form-label"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <div class="col-md-4">
+        <label asp-for="AuthorName" class="form-label"></label>
+        <input asp-for="AuthorName" class="form-control" />
+        <span asp-validation-for="AuthorName" class="text-danger"></span>
+    </div>
+    <div class="col-12">
+        <label asp-for="Summary" class="form-label"></label>
+        <textarea asp-for="Summary" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="Summary" class="text-danger"></span>
+    </div>
+    <div class="col-md-6">
+        <label asp-for="ImageFileName" class="form-label"></label>
+        <select asp-for="ImageFileName" class="form-select image-select" data-preview-id="blogImagePreview">
+            <option value="">-- Select image from ProjectFile/img --</option>
+            @foreach (var fileName in Model.AvailableImageFileNames)
+            {
+                <option value="@fileName">@fileName</option>
+            }
+        </select>
+        <span asp-validation-for="ImageFileName" class="text-danger"></span>
+        <div class="form-text">Choose one of the existing project images for the blog card.</div>
+    </div>
+    <div class="col-md-6">
+        <div class="border rounded p-3 bg-light d-inline-block w-100">
+            <div class="small text-muted mb-2">Selected image preview</div>
+            <img id="blogImagePreview" src="@previewImage" alt="Blog preview" style="width: 100%; max-width: 220px; height: 180px; object-fit: cover; @(string.IsNullOrWhiteSpace(previewImage) ? "display:none;" : string.Empty)" />
+        </div>
+    </div>
+    <div class="col-12">
+        <label asp-for="Content" class="form-label"></label>
+        <textarea asp-for="Content" class="form-control" rows="12"></textarea>
+        <span asp-validation-for="Content" class="text-danger"></span>
+    </div>
+</div>
+
+<div class="mt-4">
+    <button type="submit" class="btn btn-primary px-4">Save</button>
+    <a asp-action="Index" class="btn btn-outline-secondary px-4">Cancel</a>
+</div>
+
+<script>
+    (function () {
+        const select = document.querySelector('.image-select[data-preview-id="blogImagePreview"]');
+        const preview = document.getElementById('blogImagePreview');
+        if (!select || !preview) return;
+
+        const updatePreview = () => {
+            if (!select.value) {
+                preview.style.display = 'none';
+                preview.removeAttribute('src');
+                return;
+            }
+            preview.src = '/ProjectFile/img/' + select.value;
+            preview.style.display = 'block';
+        };
+
+        select.addEventListener('change', updatePreview);
+        updatePreview();
+    })();
+</script>

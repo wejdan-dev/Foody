@@ -1,0 +1,232 @@
+@using System.Security.Claims
+@using Front.Models
+@using Microsoft.AspNetCore.Identity
+@inject Front.Services.ICartService CartService
+@inject UserManager<ApplicationUser> UserManager
+@{
+    var isAuthenticated = User.Identity?.IsAuthenticated == true;
+    var currentUser = isAuthenticated
+        ? await UserManager.GetUserAsync(User)
+        : null;
+    var displayName = !string.IsNullOrWhiteSpace(currentUser?.FullName)
+        ? currentUser!.FullName
+        : User.Identity?.Name ?? "Account";
+    var cartCount = currentUser != null
+        ? await CartService.GetCartItemCountAsync(currentUser.Id)
+        : 0;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>@ViewData["Title"] - Foody</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+    <link href="~/ProjectFile/img/favicon.ico" rel="icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500&family=Lora:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="~/ProjectFile/lib/animate/animate.min.css" rel="stylesheet">
+    <link href="~/ProjectFile/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="~/ProjectFile/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/ProjectFile/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" role="status"></div>
+    </div>
+
+    <div class="container-fluid fixed-top px-0 wow fadeIn" data-wow-delay="0.1s">
+        <div class="top-bar row gx-0 align-items-center d-none d-lg-flex">
+            <div class="col-lg-6 px-5 text-start">
+                <small><i class="fa fa-map-marker-alt me-2"></i>23 Street, Amman, Jordan</small>
+                <small class="ms-4"><i class="fa fa-envelope me-2"></i>Foody@Yahoo.com</small>
+            </div>
+            <div class="col-lg-6 px-5 text-end">
+                <small>Follow us:</small>
+                <a class="text-body ms-3" href="https://www.facebook.com"><i class="fab fa-facebook-f"></i></a>
+                <a class="text-body ms-3" href="https://www.x.com"><i class="fab fa-twitter"></i></a>
+                <a class="text-body ms-3" href="https://www.linkedin.com"><i class="fab fa-linkedin-in"></i></a>
+                <a class="text-body ms-3" href="https://www.instagram.com"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+
+        <nav class="navbar navbar-expand-lg navbar-light py-lg-0 px-lg-5 wow fadeIn" data-wow-delay="0.1s">
+            <a asp-controller="Home" asp-action="Homepage" class="navbar-brand ms-4 ms-lg-0">
+                <h1 class="fw-bold text-primary m-0">F<span class="text-secondary">oo</span>dy</h1>
+            </a>
+            <div class="d-flex d-lg-none align-items-center ms-auto me-2 mobile-nav-actions">
+                @if (isAuthenticated)
+                {
+                    <a class="btn-sm-square bg-white rounded-circle" asp-controller="Cart" asp-action="MyOrders" title="My Orders">
+                        <small class="fa fa-clipboard-list text-body"></small>
+                    </a>
+                }
+                <a class="btn-sm-square bg-white rounded-circle position-relative" asp-controller="Cart" asp-action="Index" title="Cart">
+                    <small class="fa fa-shopping-bag text-body"></small>
+                    @if (isAuthenticated && cartCount > 0)
+                    {
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:0.6rem;">@cartCount</span>
+                    }
+                </a>
+                @if (isAuthenticated)
+                {
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-area="Admin" asp-controller="Orders" asp-action="Index" class="btn-sm-square bg-white rounded-circle ms-2" title="Admin Orders">
+                            <small class="fa fa-truck text-body"></small>
+                        </a>
+                    }
+                    <form asp-controller="Account" asp-action="Logout" method="post" class="m-0 d-inline-flex">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn-sm-square bg-white rounded-circle ms-2 border-0 mobile-logout-btn" title="Logout">
+                            <small class="fa fa-sign-out-alt text-body"></small>
+                        </button>
+                    </form>
+                }
+                else
+                {
+                    <a class="btn-sm-square bg-white rounded-circle ms-2" asp-controller="Account" asp-action="Login" title="Login">
+                        <small class="fa fa-user text-body"></small>
+                    </a>
+                }
+            </div>
+            <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <div class="navbar-nav ms-auto p-4 p-lg-0">
+                    <a asp-controller="Home" asp-action="Homepage" class="nav-item nav-link active">Home</a>
+                    <a asp-controller="Home" asp-action="AboutUs" class="nav-item nav-link">About Us</a>
+                    <a asp-controller="Products" asp-action="Index" class="nav-item nav-link">Products</a>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                        <div class="dropdown-menu m-0">
+                            <a asp-controller="Blog" asp-action="Index" class="dropdown-item">Latest Blog</a>
+                            <a asp-controller="Home" asp-action="Services" class="dropdown-item">Our Services</a>
+                            @if (isAuthenticated)
+                            {
+                                <a asp-controller="Cart" asp-action="MyOrders" class="dropdown-item">My Orders</a>
+                                <form asp-controller="Account" asp-action="Logout" method="post" class="mobile-menu-logout-form">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="dropdown-item mobile-menu-logout-btn">
+                                        <i class="fa fa-sign-out-alt me-2"></i>Logout
+                                    </button>
+                                </form>
+                            }
+                        </div>
+                    </div>
+                    <a asp-controller="Home" asp-action="ContactUs" class="nav-item nav-link">Contact Us</a>
+                </div>
+                <div class="d-none d-lg-flex ms-2 align-items-center desktop-nav-actions">
+                    @if (isAuthenticated)
+                    {
+                        <span class="me-2 desktop-display-name">@displayName</span>
+                        <a asp-controller="Cart" asp-action="MyOrders" class="btn btn-sm btn-outline-primary rounded-pill ms-2 orders-nav-link" title="My Orders">
+                            <i class="fa fa-clipboard-list me-1"></i>My Orders
+                        </a>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a asp-area="Admin" asp-controller="Orders" asp-action="Index" class="btn-sm-square bg-white rounded-circle ms-2" title="Admin Orders">
+                                <small class="fa fa-truck text-body"></small>
+                            </a>
+                        }
+                        <form asp-controller="Account" asp-action="Logout" method="post" class="m-0">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn-sm-square bg-white rounded-circle ms-3 border-0" title="Logout">
+                                <small class="fa fa-sign-out-alt text-body"></small>
+                            </button>
+                        </form>
+                    }
+                    else
+                    {
+                        <a class="btn-sm-square bg-white rounded-circle ms-3" asp-controller="Account" asp-action="Login" title="Login">
+                            <small class="fa fa-user text-body"></small>
+                        </a>
+                    }
+                    <a class="btn-sm-square bg-white rounded-circle ms-3 position-relative" asp-controller="Cart" asp-action="Index" title="Cart">
+                        <small class="fa fa-shopping-bag text-body"></small>
+                        @if (isAuthenticated && cartCount > 0)
+                        {
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:0.6rem;">@cartCount</span>
+                        }
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <div class="container-fluid p-0 mb-5 wow fadeIn" data-wow-delay="0.1s">
+        <div>
+            @RenderBody()
+        </div>
+
+        <div class="container-fluid bg-dark footer mt-5 pt-5 wow fadeIn" data-wow-delay="0.1s">
+            <div class="container py-5">
+                <div class="row g-5">
+                    <div class="col-lg-3 col-md-6">
+                        <h1 class="fw-bold text-primary mb-4">F<span class="text-secondary">oo</span>dy</h1>
+                        <p>Nourish your body with the vibrant colors and flavors of nature. Healthy food is an investment in your well-being.</p>
+                        <div class="d-flex pt-2">
+                            <a class="btn btn-square btn-outline-light rounded-circle me-1" href="#"><i class="fab fa-twitter"></i></a>
+                            <a class="btn btn-square btn-outline-light rounded-circle me-1" href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a class="btn btn-square btn-outline-light rounded-circle me-1" href="#"><i class="fab fa-youtube"></i></a>
+                            <a class="btn btn-square btn-outline-light rounded-circle me-0" href="#"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <h4 class="text-light mb-4">Address</h4>
+                        <p><i class="fa fa-map-marker-alt me-3"></i>23 Street, Amman, Jordan</p>
+                        <p><i class="fa fa-phone-alt me-3"></i>+962770000000</p>
+                        <p><i class="fa fa-envelope me-3"></i>Foody@Yahoo.com</p>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <h4 class="text-light mb-4">Quick Links</h4>
+                        <a class="btn btn-link" asp-controller="Home" asp-action="AboutUs">About Us</a>
+                        <a class="btn btn-link" asp-controller="Home" asp-action="ContactUs">Contact Us</a>
+                        <a class="btn btn-link" asp-controller="Blog" asp-action="Index">Latest Blog</a>
+                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        {
+                            <a class="btn btn-link" asp-controller="Cart" asp-action="MyOrders">My Orders</a>
+                        }
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <h4 class="text-light mb-4">Newsletter</h4>
+                        <p>Discover the power of food to heal and transform your life.</p>
+                        <div class="position-relative mx-auto" style="max-width: 400px;">
+                            <input class="form-control bg-transparent w-100 py-3 ps-4 pe-5" type="text" placeholder="Your email">
+                            <button type="button" class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">SignUp</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid copyright">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                            &copy; <a href="#">Foody</a>, All Right Reserved.
+                        </div>
+                        <div class="col-md-6 text-center text-md-end">
+                            Designed By <a href="https://htmlcodex.com">Wejdan Alhunaity</a>
+                            <br>Distributed By: <a href="https://themewagon.com" target="_blank">Wejdan Alhunaity</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded-circle back-to-top"><i class="bi bi-arrow-up"></i></a>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/ProjectFile/lib/wow/wow.min.js"></script>
+    <script src="~/ProjectFile/lib/easing/easing.min.js"></script>
+    <script src="~/ProjectFile/lib/waypoints/waypoints.min.js"></script>
+    <script src="~/ProjectFile/lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="~/ProjectFile/js/main.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

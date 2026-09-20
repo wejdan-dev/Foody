@@ -1,0 +1,84 @@
+# ============================================
+#  Foody — ملف .gitignore لمشروع ASP.NET Core 8
+# ============================================
+
+# ===== نتائج البناء (Build) =====
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Bb]uild/
+bld/
+[Ll]og/
+[Ll]ogs/
+
+# ===== Visual Studio =====
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.userprefs
+rsprops/
+*.pidb
+*.svclog
+
+# ===== Rider / VS Code =====
+.idea/
+.vscode/
+*.sln.iml
+
+# ===== NuGet =====
+*.nupkg
+**/packages/*
+!**/packages/build/
+*.nuget.props
+*.nuget.targets
+project.lock.json
+project.fragment.lock.json
+
+# ===== ملفات الإعدادات الحساسة =====
+# (لا ترفع أبداً كلمات السر أو مفاتيح الـ API)
+appsettings.Development.json
+appsettings.Production.json
+appsettings.Staging.json
+appsettings.local.json
+*.env
+.env
+
+# ===== قواعد البيانات المحلية =====
+*.mdf
+*.ldf
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+
+# ===== ملفات النشر =====
+.publish/
+publish/
+*.pubxml
+!**/Properties/PublishProfiles/*.pubxml
+[Tt]ools/
+
+# ===== Test Results =====
+[Tt]est[Rr]esult*/
+[Dd]ebugPS*/
+[Bb]enchmarks/
+TestResults/
+*.coverage
+*.coveragexml
+
+# ===== Node (لو استخدمت npm للمكتبات الأمامية) =====
+node_modules/
+npm-debug.log*
+yarn-error.log
+
+# ===== ملفات النظام =====
+.DS_Store
+Thumbs.db
+Desktop.ini
+~$*

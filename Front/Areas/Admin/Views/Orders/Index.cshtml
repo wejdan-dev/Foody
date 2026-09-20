@@ -1,0 +1,54 @@
+@model Front.ViewModels.Admin.AdminOrdersIndexViewModel
+@{
+    ViewData["Title"] = "Orders";
+}
+
+<div class="row g-3 mb-4">
+    <div class="col-md-2"><a asp-action="Index" asp-route-filter="all" class="btn @(Model.CurrentFilter == "all" ? "btn-dark" : "btn-outline-dark") w-100">All (@Model.AllCount)</a></div>
+    <div class="col-md-2"><a asp-action="Index" asp-route-filter="pending" class="btn @(Model.CurrentFilter == "pending" ? "btn-secondary" : "btn-outline-secondary") w-100">Pending (@Model.PendingCount)</a></div>
+    <div class="col-md-2"><a asp-action="Index" asp-route-filter="processing" class="btn @(Model.CurrentFilter == "processing" ? "btn-warning text-dark" : "btn-outline-warning") w-100">Processing (@Model.ProcessingCount)</a></div>
+    <div class="col-md-3"><a asp-action="Index" asp-route-filter="approved" class="btn @(Model.CurrentFilter == "approved" ? "btn-success" : "btn-outline-success") w-100">Approved / تم الشحن (@Model.ApprovedCount)</a></div>
+    <div class="col-md-3"><a asp-action="Index" asp-route-filter="rejected" class="btn @(Model.CurrentFilter == "rejected" ? "btn-danger" : "btn-outline-danger") w-100">Rejected (@Model.RejectedCount)</a></div>
+</div>
+
+<div class="card stat-card">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Order #</th>
+                    <th>Customer</th>
+                    <th>Date</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Orders.Count == 0)
+                {
+                    <tr>
+                        <td colspan="6" class="text-center py-4 text-muted">No orders found for this filter.</td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var order in Model.Orders)
+                    {
+                        <tr>
+                            <td>#@order.OrderId</td>
+                            <td>
+                                <div class="fw-semibold">@order.CustomerName</div>
+                                <div class="text-muted small">@order.CustomerEmail</div>
+                            </td>
+                            <td>@order.OrderDate.ToLocalTime().ToString("dd MMM yyyy - hh:mm tt")</td>
+                            <td>@order.TotalAmount.ToString("0.00")JD</td>
+                            <td><span class="badge @order.Status.ToBadgeClass()">@order.StatusText</span></td>
+                            <td class="text-end"><a asp-action="Details" asp-route-id="@order.OrderId" class="btn btn-sm btn-outline-primary">Open</a></td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

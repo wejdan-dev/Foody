@@ -1,0 +1,38 @@
+@model List<Front.Models.BlogPost>
+@{
+    var latestPosts = (Model ?? new List<Front.Models.BlogPost>()).Take(3).ToList();
+    var subtitle = latestPosts.FirstOrDefault()?.Title ?? "Fresh articles from Foody";
+}
+
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="section-header text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+            <h1 class="display-5 mb-3">Latest Blog</h1>
+            <p>@subtitle</p>
+        </div>
+        @if (latestPosts.Count == 0)
+        {
+            <div class="alert alert-info">No blog posts have been published yet.</div>
+        }
+        else
+        {
+            <div class="row g-4">
+                @for (var i = 0; i < latestPosts.Count; i++)
+                {
+                    var post = latestPosts[i];
+                    var delay = $"0.{(i * 2) + 1}s";
+                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="@delay">
+                        <img class="img-fluid" src="~/ProjectFile/img/@post.ImageFileName" alt="@post.Title">
+                        <div class="bg-light p-4">
+                            <a asp-controller="Blog" asp-action="Details" asp-route-id="@post.Id" class="d-block h5 lh-base mb-4">@post.Title</a>
+                            <div class="text-muted border-top pt-4">
+                                <small class="me-3"><i class="fa fa-user text-primary me-2"></i>@post.AuthorName</small>
+                                <small class="me-3"><i class="fa fa-calendar text-primary me-2"></i>@post.CreatedAt.ToString("dd MMM, yyyy")</small>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>

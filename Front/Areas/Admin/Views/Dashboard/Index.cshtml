@@ -1,0 +1,202 @@
+@model Front.ViewModels.Admin.DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card stat-card p-4">
+            <div class="text-muted mb-1">Approved Revenue</div>
+            <h2 class="mb-0">@Model.TotalRevenue.ToString("0.00")JD</h2>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card p-4">
+            <div class="text-muted mb-1">All Orders</div>
+            <h2 class="mb-0">@Model.TotalOrders</h2>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card p-4">
+            <div class="text-muted mb-1">Processing</div>
+            <h2 class="mb-0 text-warning">@Model.ProcessingOrders</h2>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card p-4">
+            <div class="text-muted mb-1">Low Stock Alerts</div>
+            <h2 class="mb-0 @(Model.LowStockProducts.Count > 0 ? "text-danger" : "")">@Model.LowStockProducts.Count</h2>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card stat-card p-4 border-start border-4 border-secondary">
+            <div class="text-muted mb-1">Pending Review</div>
+            <h3 class="mb-0">@Model.PendingOrders</h3>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card p-4 border-start border-4 border-warning">
+            <div class="text-muted mb-1">Processing</div>
+            <h3 class="mb-0">@Model.ProcessingOrders</h3>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card p-4 border-start border-4 border-success">
+            <div class="text-muted mb-1">Approved / Shipped</div>
+            <h3 class="mb-0">@Model.ApprovedOrders</h3>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card p-4 border-start border-4 border-danger">
+            <div class="text-muted mb-1">Rejected</div>
+            <h3 class="mb-0">@Model.RejectedOrders</h3>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-lg-7">
+        <div class="card stat-card p-4 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0">Latest Customer Orders</h5>
+                <a asp-controller="Orders" asp-action="Index" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            @if (Model.RecentOrders.Count == 0)
+            {
+                <p class="text-muted mb-0">No orders have been placed yet.</p>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-sm align-middle mb-0">
+                        <thead>
+                            <tr><th>Order</th><th>Customer</th><th>Total</th><th>Status</th><th></th></tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var order in Model.RecentOrders)
+                            {
+                                <tr>
+                                    <td>#@order.OrderId</td>
+                                    <td>
+                                        <div>@order.CustomerName</div>
+                                        <small class="text-muted">@order.CustomerEmail</small>
+                                    </td>
+                                    <td>@order.TotalAmount.ToString("0.00")JD</td>
+                                    <td><span class="badge @order.Status.ToBadgeClass()">@order.StatusText</span></td>
+                                    <td><a asp-controller="Orders" asp-action="Details" asp-route-id="@order.OrderId" class="btn btn-sm btn-outline-primary">Open</a></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="card stat-card p-4 h-100">
+            <h5 class="mb-3">Top Selling Products</h5>
+            @if (Model.TopProducts.Count == 0)
+            {
+                <p class="text-muted mb-0">No approved sales data yet.</p>
+            }
+            else
+            {
+                <table class="table table-sm mb-0">
+                    <thead>
+                        <tr><th>Product</th><th>Qty Sold</th><th>Revenue</th></tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var p in Model.TopProducts)
+                        {
+                            <tr>
+                                <td>@p.ProductName</td>
+                                <td>@p.TotalQuantitySold</td>
+                                <td>@p.TotalRevenue.ToString("0.00")JD</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-lg-7">
+        <div class="card stat-card p-4">
+            <h5 class="mb-3">Revenue - Last 6 Months</h5>
+            @if (Model.MonthlySales.Count == 0)
+            {
+                <p class="text-muted mb-0">No approved orders yet.</p>
+            }
+            else
+            {
+                <canvas id="monthlySalesChart" height="120"></canvas>
+            }
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="card stat-card p-4 h-100">
+            <h5 class="mb-3">Low Stock / Out of Stock</h5>
+            @if (Model.LowStockProducts.Count == 0)
+            {
+                <p class="text-muted mb-0">All products are well stocked. 🎉</p>
+            }
+            else
+            {
+                <table class="table table-sm mb-0">
+                    <thead>
+                        <tr><th>Product</th><th>Stock</th><th>Status</th></tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var p in Model.LowStockProducts.Take(6))
+                        {
+                            <tr>
+                                <td>@p.Name</td>
+                                <td>@p.StockQuantity</td>
+                                <td>
+                                    @if (!p.IsInStock)
+                                    {
+                                        <span class="badge bg-danger">Out of Stock</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning text-dark">Low Stock</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @if (Model.MonthlySales.Count > 0)
+    {
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+        <script>
+            const ctx = document.getElementById('monthlySalesChart');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.MonthlySales.Select(m => m.MonthLabel))),
+                    datasets: [{
+                        label: 'Revenue (JD)',
+                        data: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.MonthlySales.Select(m => m.TotalRevenue))),
+                        backgroundColor: '#4caf50'
+                    }]
+                },
+                options: {
+                    scales: { y: { beginAtZero: true } },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        </script>
+    }
+}

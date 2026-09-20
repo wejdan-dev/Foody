@@ -1,0 +1,19 @@
+@{
+    ViewData["Title"] = "Order Confirmed";
+}
+
+<br />
+<br />
+<br />
+<br />
+
+<div class="container-xxl py-6 text-center">
+    <div class="container">
+        <h1 class="display-5 mb-3">✅ Thank you for your order!</h1>
+        <p class="mb-4">Your order number is <strong>#@ViewBag.OrderId</strong>. It is now waiting for admin review.</p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a asp-controller="Cart" asp-action="MyOrders" class="btn btn-secondary rounded-pill py-3 px-5">My Orders</a>
+            <a asp-controller="Products" asp-action="Index" class="btn btn-primary rounded-pill py-3 px-5">Continue Shopping</a>
+        </div>
+    </div>
+</div>

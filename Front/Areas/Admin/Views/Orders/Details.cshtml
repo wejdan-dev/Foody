@@ -1,0 +1,76 @@
+@model Front.ViewModels.OrderDetailsViewModel
+@{
+    ViewData["Title"] = $"Order #{Model.OrderId}";
+}
+
+<div class="row g-4">
+    <div class="col-lg-4">
+        <div class="card stat-card p-4 h-100">
+            <h4 class="mb-3">Customer & Status</h4>
+            <p class="mb-2"><strong>Customer:</strong> @Model.CustomerName</p>
+            <p class="mb-2"><strong>Email:</strong> @Model.CustomerEmail</p>
+            <p class="mb-2"><strong>Order Date:</strong> @Model.OrderDate.ToLocalTime().ToString("dd MMM yyyy - hh:mm tt")</p>
+            <p class="mb-3"><strong>Status:</strong> <span class="badge @Model.Status.ToBadgeClass()">@Model.StatusText</span></p>
+            <p class="mb-4"><strong>Customer View:</strong> @Model.StatusMessage</p>
+
+            <div class="d-grid gap-2">
+                @if (Model.Status != Front.Models.OrderStatus.Processing)
+                {
+                    <form asp-action="MarkProcessing" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@Model.OrderId" />
+                        <button type="submit" class="btn btn-warning text-dark w-100">Set Processing / قيد التجهيز</button>
+                    </form>
+                }
+                @if (Model.Status != Front.Models.OrderStatus.Approved)
+                {
+                    <form asp-action="Approve" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@Model.OrderId" />
+                        <button type="submit" class="btn btn-success w-100">Approve / تم الشحن</button>
+                    </form>
+                }
+                @if (Model.Status != Front.Models.OrderStatus.Rejected)
+                {
+                    <form asp-action="Reject" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@Model.OrderId" />
+                        <button type="submit" class="btn btn-danger w-100">Reject</button>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        <div class="card stat-card p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="mb-0">Order Items</h4>
+                <span class="fw-bold">Total: @Model.TotalAmount.ToString("0.00")JD</span>
+            </div>
+            <div class="table-responsive">
+                <table class="table align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Unit Price</th>
+                            <th>Quantity</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Items)
+                        {
+                            <tr>
+                                <td>@item.ProductName</td>
+                                <td>@item.UnitPrice.ToString("0.00")JD</td>
+                                <td>@item.Quantity</td>
+                                <td>@item.LineTotal.ToString("0.00")JD</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,73 @@
+@model Front.ViewModels.LoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<br />
+<br />
+<br />
+<br />
+
+<!-- Page Header Start -->
+<div class="container-fluid page-header wow fadeIn" data-wow-delay="0.1s">
+    <div class="container">
+        <h1 class="display-3 mb-3 animated slideInDown">Login</h1>
+        <nav aria-label="breadcrumb animated slideInDown">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a class="text-body" asp-controller="Home" asp-action="Homepage">Home</a></li>
+                <li class="breadcrumb-item text-dark active" aria-current="page">Login</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<!-- Page Header End -->
+
+<div class="container-xxl py-6">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-5 col-md-8 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="section-header text-center mb-5" style="max-width: 500px; margin: 0 auto;">
+                    <h1 class="display-5 mb-3">Welcome Back</h1>
+                    <p>Enjoy your Shopping.</p>
+                </div>
+
+                <form asp-controller="Account" asp-action="Login" method="post">
+                    <input type="hidden" asp-for="ReturnUrl" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <div class="form-floating">
+                                <input asp-for="Email" class="form-control" placeholder="Your Email">
+                                <label asp-for="Email"></label>
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-floating">
+                                <input asp-for="Password" class="form-control" placeholder="Password">
+                                <label asp-for="Password"></label>
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-12 form-check">
+                            <input asp-for="RememberMe" class="form-check-input" />
+                            <label asp-for="RememberMe" class="form-check-label"></label>
+                        </div>
+                        <div class="col-12">
+                            <button class="btn btn-primary rounded-pill py-3 px-5 w-100" type="submit">Login</button>
+                        </div>
+                        <div class="col-12 text-center">
+                            <span> Don't have an account? <a asp-controller="Account" asp-action="Register">Sign up</a></span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,82 @@
+@model Front.ViewModels.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<br />
+<br />
+<br />
+<br />
+
+<!-- Page Header Start -->
+<div class="container-fluid page-header wow fadeIn" data-wow-delay="0.1s">
+    <div class="container">
+        <h1 class="display-3 mb-3 animated slideInDown">Create Account</h1>
+        <nav aria-label="breadcrumb animated slideInDown">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a class="text-body" asp-controller="Home" asp-action="Homepage">Home</a></li>
+                <li class="breadcrumb-item text-dark active" aria-current="page">Register</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<!-- Page Header End -->
+
+<div class="container-xxl py-6">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="section-header text-center mb-5" style="max-width: 500px; margin: 0 auto;">
+                    <h1 class="display-5 mb-3">Join Foody</h1>
+                    <p>Create a new account to start shopping and track your orders. </p>
+                </div>
+
+                <form asp-controller="Account" asp-action="Register" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <div class="form-floating">
+                                <input asp-for="FullName" class="form-control" placeholder="Your Name">
+                                <label asp-for="FullName"></label>
+                                <span asp-validation-for="FullName" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-floating">
+                                <input asp-for="Email" class="form-control" placeholder="Your Email">
+                                <label asp-for="Email"></label>
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-floating">
+                                <input asp-for="Password" class="form-control" placeholder="Password">
+                                <label asp-for="Password"></label>
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-floating">
+                                <input asp-for="ConfirmPassword" class="form-control" placeholder="Confirm Password">
+                                <label asp-for="ConfirmPassword"></label>
+                                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <button class="btn btn-primary rounded-pill py-3 px-5 w-100" type="submit">Create Account</button>
+                        </div>
+                        <div class="col-12 text-center">
+                            <span>Do you have an account? <a asp-controller="Account" asp-action="Login">Login</a></span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

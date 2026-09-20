@@ -1,0 +1,77 @@
+@model Front.ViewModels.Admin.ProductFormViewModel
+@{
+    var previewImage = string.IsNullOrWhiteSpace(Model.ImageFileName) ? string.Empty : Url.Content($"~/ProjectFile/img/{Model.ImageFileName}");
+}
+
+<div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+@if (Model.Id is not null)
+{
+    <input type="hidden" asp-for="Id" />
+}
+
+<div class="row g-3">
+    <div class="col-md-6">
+        <label asp-for="Name" class="form-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="col-md-3">
+        <label asp-for="Price" class="form-label"></label>
+        <input asp-for="Price" class="form-control" type="number" step="0.01" />
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+    <div class="col-md-3">
+        <label asp-for="StockQuantity" class="form-label"></label>
+        <input asp-for="StockQuantity" class="form-control" type="number" />
+        <span asp-validation-for="StockQuantity" class="text-danger"></span>
+    </div>
+    <div class="col-md-6">
+        <label asp-for="Category" class="form-label"></label>
+        <select asp-for="Category" class="form-select" asp-items="Html.GetEnumSelectList<Front.Models.ProductCategory>()"></select>
+    </div>
+    <div class="col-md-6">
+        <label asp-for="ImageFileName" class="form-label"></label>
+        <select asp-for="ImageFileName" class="form-select image-select" data-preview-id="productImagePreview">
+            <option value="">-- Select image from ProjectFile/img --</option>
+            @foreach (var fileName in Model.AvailableImageFileNames)
+            {
+                <option value="@fileName">@fileName</option>
+            }
+        </select>
+        <span asp-validation-for="ImageFileName" class="text-danger"></span>
+        <div class="form-text">This now saves the selected file name from wwwroot/ProjectFile/img.</div>
+    </div>
+    <div class="col-12">
+        <div class="border rounded p-3 bg-light d-inline-block">
+            <div class="small text-muted mb-2">Selected image preview</div>
+            <img id="productImagePreview" src="@previewImage" alt="Product preview" style="width: 180px; height: 180px; object-fit: cover; @(string.IsNullOrWhiteSpace(previewImage) ? "display:none;" : string.Empty)" />
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <button type="submit" class="btn btn-primary px-4">Save</button>
+    <a asp-action="Index" class="btn btn-outline-secondary px-4">Cancel</a>
+</div>
+
+<script>
+    (function () {
+        const select = document.querySelector('.image-select[data-preview-id="productImagePreview"]');
+        const preview = document.getElementById('productImagePreview');
+        if (!select || !preview) return;
+
+        const updatePreview = () => {
+            if (!select.value) {
+                preview.style.display = 'none';
+                preview.removeAttribute('src');
+                return;
+            }
+            preview.src = '/ProjectFile/img/' + select.value;
+            preview.style.display = 'block';
+        };
+
+        select.addEventListener('change', updatePreview);
+        updatePreview();
+    })();
+</script>

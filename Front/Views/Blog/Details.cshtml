@@ -1,0 +1,35 @@
+@model Front.Models.BlogPost
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<br />
+<br />
+
+<div class="container-fluid p-0 mb-5 wow fadeIn" data-wow-delay="0.1s">
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="row g-5 align-items-start">
+                <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
+                    <div class="about-img position-relative overflow-hidden p-5 pe-0">
+                        <img class="img-fluid w-100" src="~/ProjectFile/img/@Model.ImageFileName" alt="@Model.Title" />
+                    </div>
+                </div>
+                <div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
+                    <h1 class="display-5 mb-4">@Model.Title</h1>
+                    <div class="text-muted mb-4 d-flex flex-wrap gap-3">
+                        <span><i class="fa fa-user text-primary me-2"></i>@Model.AuthorName</span>
+                        <span><i class="fa fa-calendar text-primary me-2"></i>@Model.CreatedAt.ToString("dd MMM, yyyy")</span>
+                        @if (Model.UpdatedAt.HasValue)
+                        {
+                            <span><i class="fa fa-pen text-primary me-2"></i>Updated @Model.UpdatedAt.Value.ToString("dd MMM, yyyy")</span>
+                        }
+                    </div>
+                    <p class="mb-4 fw-semibold">@Model.Summary</p>
+                    <div class="mb-4" style="white-space: pre-line; line-height: 1.9;">@Model.Content</div>
+                    <a asp-controller="Blog" asp-action="Index" class="btn btn-primary rounded-pill py-2 px-4">Back to Blog</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

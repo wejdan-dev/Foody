@@ -1,0 +1,44 @@
+@model Front.Models.Product
+
+<div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+    <div class="product-item">
+        <div class="position-relative bg-light overflow-hidden">
+            <img class="img-fluid w-100" src="~/ProjectFile/img/@Model.ImageFileName" alt="@Model.Name">
+            @if (!Model.IsInStock)
+            {
+                <span class="badge bg-danger position-absolute top-0 start-0 m-2">Out of Stock</span>
+            }
+            else if (Model.IsLowStock)
+            {
+                <span class="badge bg-warning text-dark position-absolute top-0 start-0 m-2">Low Stock</span>
+            }
+        </div>
+        <div class="text-center p-4">
+            <span class="d-block h5 mb-2">@Model.Name</span>
+            <span class="text-primary me-1">@Model.Price.ToString("0.00")JD</span>
+        </div>
+        <div class="d-flex border-top">
+            <small class="w-50 text-center border-end py-2">
+                <a class="text-body" href="#"><i class="fa fa-eye text-primary me-2"></i>View detail</a>
+            </small>
+            <small class="w-50 text-center py-2">
+                @if (Model.IsInStock)
+                {
+                    <form asp-controller="Cart" asp-action="AddToCart" method="post" class="m-0 add-to-cart-form">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="productId" value="@Model.Id" />
+                        <input type="hidden" name="quantity" value="1" />
+                        <input type="hidden" name="returnUrl" value="" class="return-url-input" />
+                        <button type="submit" class="btn btn-link text-body text-decoration-none p-0">
+                            <i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart
+                        </button>
+                    </form>
+                }
+                else
+                {
+                    <span class="text-muted"><i class="fa fa-shopping-bag me-2"></i>Out of stock</span>
+                }
+            </small>
+        </div>
+    </div>
+</div>

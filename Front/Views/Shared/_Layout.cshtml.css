@@ -1,0 +1,128 @@
+﻿/* Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+a.navbar-brand {
+  white-space: nowrap;
+}
+
+a {
+  color: #0077cc;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+.border-top {
+  border-top: 1px solid #e5e5e5;
+}
+.border-bottom {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow {
+  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy {
+  font-size: 1rem;
+  line-height: inherit;
+}
+
+.footer {
+  position: static;
+  bottom: auto;
+  width: 100%;
+  white-space: normal;
+  line-height: 1.6;
+}
+
+.desktop-display-name {
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mobile-nav-actions {
+  gap: .5rem;
+}
+
+.mobile-nav-actions form {
+  display: inline-flex;
+  margin: 0;
+}
+
+.mobile-logout-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile-menu-logout-form {
+  margin: 0;
+}
+
+.mobile-menu-logout-btn {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  text-align: left;
+}
+
+@media (min-width: 992px) {
+  .mobile-nav-actions {
+    display: none !important;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .desktop-nav-actions {
+    display: none !important;
+  }
+
+  /* Logo was fixed at the desktop h1 size (2.5rem / 40px). Combined with the
+     brand's ms-4 margin, up to 4 icon buttons and the toggler all competing
+     for space on one row, this pushed content past the viewport (or forced
+     an awkward wrap) on phone-width screens. */
+  .navbar-brand h1 {
+    font-size: 1.5rem;
+  }
+
+  .navbar-brand.ms-4 {
+    margin-left: 0.75rem !important;
+  }
+}
+
+@media (max-width: 420px) {
+  /* Tighten further on small phones so the icon cluster + toggler don't
+     overflow/wrap next to the logo. */
+  .mobile-nav-actions {
+    gap: 0.35rem;
+  }
+
+  .mobile-nav-actions .btn-sm-square {
+    width: 28px;
+    height: 28px;
+  }
+
+  .navbar-toggler {
+    padding: 0.25rem 0.5rem;
+  }
+}
+
+/* Products page category pills (Vegetable / Fruits / Herbs): the list is
+   display:inline-flex with no wrap, so on narrow phones the three buttons
+   can run past the column edge instead of dropping to a second line. */
+.product-category-tabs {
+  flex-wrap: wrap;
+  row-gap: 0.5rem;
+}

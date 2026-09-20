@@ -1,0 +1,65 @@
+@model List<Front.ViewModels.OrderSummaryViewModel>
+@{
+    ViewData["Title"] = "My Orders";
+}
+
+<br />
+<br />
+<br />
+<br />
+
+<div class="container-fluid page-header wow fadeIn" data-wow-delay="0.1s">
+    <div class="container">
+        <h1 class="display-3 mb-3 animated slideInDown">My Orders</h1>
+        <nav aria-label="breadcrumb animated slideInDown">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a class="text-body" asp-controller="Home" asp-action="Homepage">Home</a></li>
+                <li class="breadcrumb-item text-dark active" aria-current="page">Orders</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="container-xxl py-5">
+    <div class="container">
+        @if (Model.Count == 0)
+        {
+            <div class="text-center py-5">
+                <h4 class="mb-4">You do not have any previous orders yet.</h4>
+                <a asp-controller="Products" asp-action="Index" class="btn btn-primary rounded-pill py-3 px-5">Browse Products</a>
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table align-middle table-hover">
+                    <thead>
+                        <tr>
+                            <th>Order #</th>
+                            <th>Date</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Message</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var order in Model)
+                        {
+                            <tr>
+                                <td>#@order.OrderId</td>
+                                <td>@order.OrderDate.ToLocalTime().ToString("dd MMM yyyy - hh:mm tt")</td>
+                                <td>@order.TotalAmount.ToString("0.00")JD</td>
+                                <td><span class="badge @order.Status.ToBadgeClass()">@order.StatusText</span></td>
+                                <td>@order.StatusMessage</td>
+                                <td class="text-end">
+                                    <a asp-action="OrderDetails" asp-route-id="@order.OrderId" class="btn btn-sm btn-outline-primary">Details</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,112 @@
+@model IReadOnlyList<Front.Models.Product>
+@using Front.Models
+
+@{
+    ViewData["Title"] = "Products";
+
+    var vegetables = Model.Where(p => p.Category == ProductCategory.Vegetable).ToList();
+    var fruits = Model.Where(p => p.Category == ProductCategory.Fruit).ToList();
+    var herbs = Model.Where(p => p.Category == ProductCategory.Herb).ToList();
+}
+
+<br />
+<br />
+<br />
+<br />
+
+<!-- Product Start -->
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="row g-0 gx-5 align-items-end">
+            <div class="col-lg-6">
+                <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+                    <h1 class="display-5 mb-3">Our Products</h1>
+                    <p>Enjoy freshly picked, seasonal, 100% organic vegetables, delivered straight from our field to your door.</p>
+                </div>
+            </div>
+            <div class="col-lg-6 text-start text-lg-end wow slideInRight" data-wow-delay="0.1s">
+                <ul class="nav nav-pills d-inline-flex justify-content-end mb-5 product-category-tabs">
+                    <li class="nav-item me-2">
+                        <a class="btn btn-outline-primary border-2 active" data-bs-toggle="pill" href="#tab-1">Vegetable</a>
+                    </li>
+                    <li class="nav-item me-2">
+                        <a class="btn btn-outline-primary border-2" data-bs-toggle="pill" href="#tab-2">Fruits</a>
+                    </li>
+                    <li class="nav-item me-0">
+                        <a class="btn btn-outline-primary border-2" data-bs-toggle="pill" href="#tab-3">Herbs</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="tab-content">
+            <div id="tab-1" class="tab-pane fade show p-0 active">
+                <div class="row g-4">
+                    @foreach (var product in vegetables)
+                    {
+                        <partial name="_ProductCard" model="product" />
+                    }
+                </div>
+            </div>
+            <div id="tab-2" class="tab-pane fade show p-0">
+                <div class="row g-4">
+                    @foreach (var product in fruits)
+                    {
+                        <partial name="_ProductCard" model="product" />
+                    }
+                </div>
+            </div>
+            <div id="tab-3" class="tab-pane fade show p-0">
+                <div class="row g-4">
+                    @foreach (var product in herbs)
+                    {
+                        <partial name="_ProductCard" model="product" />
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Product End -->
+
+@section Scripts {
+    <script>
+        (function () {
+            const updateReturnUrls = () => {
+                const currentUrl = window.location.pathname + window.location.search + window.location.hash;
+                document.querySelectorAll('.return-url-input').forEach(input => input.value = currentUrl);
+            };
+
+            const activateTabFromHash = () => {
+                const hash = window.location.hash;
+                if (!hash) {
+                    updateReturnUrls();
+                    return;
+                }
+
+                const trigger = document.querySelector('.product-category-tabs a[href="' + hash + '"]');
+                if (trigger && window.bootstrap && bootstrap.Tab) {
+                    bootstrap.Tab.getOrCreateInstance(trigger).show();
+                }
+
+                updateReturnUrls();
+            };
+
+            document.querySelectorAll('.product-category-tabs a[data-bs-toggle="pill"]').forEach(tab => {
+                tab.addEventListener('shown.bs.tab', function (event) {
+                    const target = event.target.getAttribute('href');
+                    if (target) {
+                        history.replaceState(null, '', target);
+                    }
+                    updateReturnUrls();
+                });
+            });
+
+            document.querySelectorAll('.add-to-cart-form').forEach(form => {
+                form.addEventListener('submit', updateReturnUrls);
+            });
+
+            window.addEventListener('hashchange', activateTabFromHash);
+            activateTabFromHash();
+        })();
+    </script>
+}

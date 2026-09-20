@@ -1,0 +1,55 @@
+@model List<Front.Models.BlogPost>
+@{
+    ViewData["Title"] = "Blog Posts";
+}
+
+<div class="d-flex justify-content-end mb-3">
+    <a asp-action="Create" class="btn btn-success"><i class="fa fa-plus me-1"></i>Add Blog Post</a>
+</div>
+
+<div class="card stat-card">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Created</th>
+                    <th>Updated</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Count == 0)
+                {
+                    <tr>
+                        <td colspan="5" class="text-center py-4 text-muted">No blog posts yet.</td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var post in Model)
+                    {
+                        <tr>
+                            <td>
+                                <div class="fw-semibold">@post.Title</div>
+                                <div class="text-muted small">@post.Summary</div>
+                            </td>
+                            <td>@post.AuthorName</td>
+                            <td>@post.CreatedAt.ToString("dd MMM yyyy")</td>
+                            <td>@(post.UpdatedAt.HasValue ? post.UpdatedAt.Value.ToString("dd MMM yyyy") : "-")</td>
+                            <td class="text-end">
+                                <a asp-area="" asp-controller="Blog" asp-action="Details" asp-route-id="@post.Id" class="btn btn-sm btn-outline-secondary me-1">View</a>
+                                <a asp-action="Edit" asp-route-id="@post.Id" class="btn btn-sm btn-outline-primary me-1"><i class="fa fa-pen"></i></a>
+                                <form asp-action="Delete" asp-route-id="@post.Id" method="post" class="d-inline" onsubmit="return confirm('Delete this blog post?');">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fa fa-trash"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
