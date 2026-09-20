@@ -1,6 +1,7 @@
-# 🍔 Foody — Restaurant Management System
+# 🥕 Foody — Organic Produce Sales System
 
-A modern restaurant management web application built with **ASP.NET Core 8**, featuring authentication, role-based authorization, and a clean MVC architecture.
+
+An Organic Produce Sales System web application built with **ASP.NET Core 8**, featuring authentication, role-based authorization, and a clean MVC architecture.
 
 ![.NET](https://img.shields.io/badge/.NET-8.0-512BD4?logo=dotnet&logoColor=white)
 ![ASP.NET Core](https://img.shields.io/badge/ASP.NET%20Core-MVC-0078D4?logo=asp.net&logoColor=white)
@@ -13,7 +14,7 @@ A modern restaurant management web application built with **ASP.NET Core 8**, fe
 
 ## 📌 Overview
 
-**Foody** is a web-based restaurant management platform that demonstrates a complete ASP.NET Core 8 application following the MVC pattern with Entity Framework Core for data access and ASP.NET Core Identity for authentication.
+**Foody** is a web-based Organic Produce Sales System platform that demonstrates a complete ASP.NET Core 8 application following the MVC pattern with Entity Framework Core for data access and ASP.NET Core Identity for authentication.
 
 The project is structured to be educational and easy to extend — perfect for showcasing full-stack development skills.
 
@@ -59,7 +60,7 @@ Before running this project, make sure you have installed:
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/weqdan-dev/Foody.git
+   git clone https://github.com/wejdan-dev/Foody.git
    cd Foody
    ```
 
@@ -151,12 +152,12 @@ Key tables created by Identity migrations:
 
 ## 🧑‍💻 About the Developer
 
-**Weqdan Al-Hunaty** — Junior Full-Stack Developer
+**Wejdan Al-Hunaty** — Junior Full-Stack Developer
 specializing in C#, ASP.NET Core MVC & SQL Server, CIS & Correlation.
 
-[![GitHub](https://img.shields.io/badge/GitHub-weqdan--dev-181717?logo=github)](https://github.com/weqdan-dev)
+[![GitHub](https://img.shields.io/badge/GitHub-wejdan--dev-181717?logo=github)](https://github.com/wejdan-dev)
 
-📧 [weqdan.al.hunaty@gmail.com](mailto:weqdan.al.hunaty@gmail.com)
+📧 [wejdan.al.hunaty@gmail.com](mailto:wejdan.al.hunaty@gmail.com)
 
 ---
 
@@ -168,7 +169,7 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 
 ## 🤝 Contributing
 
-Contributions, issues and feature requests are welcome! Feel free to check the [issues page](https://github.com/weqdan-dev/Foody/issues).
+Contributions, issues and feature requests are welcome! Feel free to check the [issues page](https://github.com/wejdan-dev/Foody/issues).
 
 ---
 
